@@ -1,0 +1,42 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+struct compare {
+    bool operator()(const std::string& first, const std::string& second) {
+        string tempA = first;
+        string tempB = second;
+        
+        string strA = tempA.append(tempB);
+        tempA = first;
+        string strB = tempB.append(tempA);
+        
+        return stoi(strA) > stoi(strB);
+    }
+};
+
+string solution(vector<int> numbers) {
+    string answer = "";
+    vector<string> strV;
+    compare c;
+    
+    //int to string
+    for(int i = 0; i < numbers.size(); i++){
+        strV.push_back(to_string(numbers[i]));
+    }
+    
+    sort(strV.begin(), strV.end(), c);
+    
+    //push answer
+    for(int i = 0 ; i < strV.size(); i++){
+        answer.append(strV[i]);
+    }
+    
+    if(answer.at(0) == '0'){
+        return "0";   
+    }
+    
+    return answer;
+}
