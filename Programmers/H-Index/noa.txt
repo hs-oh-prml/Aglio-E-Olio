@@ -1,0 +1,43 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int bigger(int key, vector<int> v){
+    for(int i = 0; i < v.size(); i++){
+        if(key <= v[i]){
+            return v.size() - i;
+        }
+    }
+    return v[v.size()-1];
+}
+
+int smaller(int key, vector<int> v){
+    for(int i = 0; i < v.size(); i++){
+        if(key <= v[i]){
+            return i+1;
+        }
+    }
+    return v[v.size()-1];
+}
+
+int solution(vector<int> citations) {
+    int answer = 0;
+    
+    //sort
+    sort(citations.begin(), citations.end());
+    
+    int max = citations[citations.size()-1];
+
+    for(int i = max; i >= 0; --i){
+        // i보다 작거나 같은 것의 갯수
+        int small = smaller(i,citations);
+        //i 보다 크거나 같은 것의 갯수
+        int big = bigger(i,citations);
+        
+        if((big >= i) && (i >= small)){
+            return i;
+        }
+    }
+}
