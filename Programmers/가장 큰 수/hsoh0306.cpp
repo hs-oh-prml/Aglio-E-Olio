@@ -29,10 +29,20 @@ bool compare(const int & a, const int & b) {
 			}
 			if (j == B.size() - 1 && i == A.size() - 1) {
 				if (B.size() > A.size()) {
-					return A[0] > B[A.size()];
+					if (A[0] != B[j]) {
+						return A[0] > B[j];
+					}
+					else {
+						return B[0] > A[i];
+					}
 				}
 				else {
-					return B[0] < A[B.size()];
+					if (B[0] != A[i]) {
+						return B[0] < A[i];
+					}
+					else {
+						return B[j] < A[0];
+					}
 				}
 			}
 
@@ -125,11 +135,12 @@ int main(void) {
 	test2.push_back(9);
 
 	vector<int> test3;
-	test3.push_back(403);
-	test3.push_back(40);
+	test3.push_back(2);
+	test3.push_back(223);
+	test3.push_back(22);
 //	test3.push_back(1000);
 //	test3.push_back(0);
 	cout << solution(test3) << endl;
 //	compare1(3, 30);
-//	compare(40, 403);
+//	compare(223, 2);
 }
