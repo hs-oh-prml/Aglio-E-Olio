@@ -1,0 +1,42 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(vector<vector<int>> baseball) {
+	int answer = 0;
+	int size = baseball.size();
+	for (int start = 123; start < 987; start++) {
+		string ans = to_string(start);
+		if (ans[0] == ans[1] || ans[1] == ans[2] || ans[0] == ans[2] || ans[1] == '0' || ans[2] == '0')
+			continue;
+
+		int count = 0;
+		for (int i = 0; i < size; i++) {
+			string hint = to_string(baseball[i][0]);
+
+			int ball = 0, strike = 0;
+
+			for (int j = 0; j < 3; j++) {
+				for (int k = 0; k < 3; k++) {
+					if (ans.at(j) == hint.at(k)) {
+						if (j == k)
+							strike++;
+						else
+							ball++;
+					}
+				}
+			}
+			if (strike == baseball[i][1] && ball == baseball[i][2]) {
+				count++;
+			}
+
+		}
+		if (count == size) {
+			answer++;
+		}
+
+	}
+	return answer;
+}
