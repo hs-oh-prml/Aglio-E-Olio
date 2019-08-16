@@ -4,84 +4,98 @@
 
 using namespace std;
 
-vector<int> solution(vector<int> answers) {
-    vector<int> answer;
-    
-    int point1 = 0 ;
-    int point2 = 0 ;
-    int point3 = 0 ;
-    
-    for(int i = 0; i < answers.size(); i++){
-        // person 1
-        int check1 = 0 ;
-        int index1 = i%5;
-        switch(index1){
-            case 1 : check1 = 2;break;
-            case 2 : check1 = 3;break;
-            case 3 : check1 = 4;break;
-            case 4 : check1 = 5;break;
-            case 0 : check1 = 1;break;
+int sosu(int num) {
+
+    if (num == 0 || num == 1) {
+        return 0;
+    }
+    for (int i = 2; i < ((num / 2)+1); i++) {
+        if (num%i == 0) {
+            return 0;
         }
-        //채점
-        if(check1 == answers[i]){
-            point1 += 1;
-        }
-        
-        // person 2
-        int check2 = 0;
-        int index2 = 0;
-            //짝수번 문제
-        if(i%2 == 0){
-            check2 = 2;
-        }
-        else{
-            //홀수번 문제
-            index2 = ((i)/2)%4;
-            switch(index2){
-                case 1 : check2 = 3;break;
-                case 2 : check2 = 4;break;
-                case 3 : check2 = 5;break;
-                case 0 : check2 = 1;break;
+    }
+    return 1;
+}
+
+int combi(vector<int> n, int index) {
+    // 0과1을 저장 할 벡터 생성
+    vector<int> ind;
+    int count = 0;
+    int k = index;
+
+    sort(n.begin(), n.end());
+
+    for (int i = 0; i < k; i++) {
+        ind.push_back(1);
+    }
+
+    for (int i = 0; i < n.size() - k; i++) {
+        ind.push_back(0);
+    }
+
+    sort(ind.begin(), ind.end());
+    vector<int> check;
+    do {
+        // 출력
+        vector<int> str;
+        for (int i = 0; i < ind.size(); i++) {
+            if (ind[i] == 1) {
+                str.push_back(n[i]);
             }
         }
-        //채점
-        if(check2 == answers[i]){
-            point2++;
-        }
-        
-        // person 3
-        int check3 = 0;
-        int index3 = ((i)/2)%5;
-        
-        switch(index3){
-            case 1 : check3 = 1;break;
-            case 2 : check3 = 2;break;
-            case 3 : check3 = 4;break;
-            case 4 : check3 = 5;break;
-            case 0 : check3 = 3;break;
-        }
-        //채점
-        if(check3 == answers[i]){
-            point3++;
-        }
-    }
-    // point 1, 2, 3 에서 max값 찾아서
-    vector<int> temp;
-    temp.push_back(point1);
-    temp.push_back(point2);
-    temp.push_back(point3);
-    
-    int max = 0;
-    for(int i = 0; i < 3; i++){
-        if(max < temp[i]){
-            max = temp[i];
-        }
-    }
-    for(int i = 0; i < temp.size(); i++){
-        if(max == temp[i]){
-            answer.push_back(i+1);
-        }
-    }
-    
-    return answer;
+
+        do {
+            string temp = "";
+            for (int i = 0; i < str.size(); i++) {
+                temp += to_string(str[i]);
+            }
+
+            if (temp.at(0) != '0') {
+                int iii = stoi(temp);
+                if (find(check.begin(), check.end(), iii) != check.end()) {
+                    /* v contains x */
+                }
+                else {
+                    /* v does not contain x */
+                    count += sosu(iii);
+                    check.push_back(iii);
+                }       
+            }
+
+        }while(next_permutation(str.begin(), str.end()));
+        //int iii = stoi(str);
+        //count += sosu(iii);
+
+    } while (next_permutation(ind.begin(), ind.end()));
+    return count;
 }
+
+int solution(string numbers) {
+    int answer = 0;
+    int length = numbers.length();
+
+    // first, string to string Vector & sort
+    vector<int> intV;
+    for(int i = 0 ; i < length; i++){
+        string a;
+        a +=  numbers.at(i);
+        int temp = stoi(a);
+        intV.push_back(temp);
+    }
+    sort(intV.begin(), intV.end());
+
+    //second, for문으로 자릿수만큼 돌려서 소수판별 대상이 되는 숫자 만들기
+
+    //third, check int Vector sosu or not
+    int count = 0;
+    //count += sosu(0);
+
+    //copy
+    vector<int> tempV = intV;
+    for(int i = 0; i < intV.size(); i++){
+        //set root
+        count += combi(tempV, i+1);
+    }
+
+    return count;
+}}}
