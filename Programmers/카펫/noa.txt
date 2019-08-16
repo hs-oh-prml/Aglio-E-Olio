@@ -1,0 +1,34 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+vector<int> solution(int brown, int red) {
+    vector<int> answer;
+    int sum = brown + red;
+    //sum의 약수를 모두 계산해서 벡터에 집어 넣어
+    for (int i = 1; i <= sum; i++) {
+		if (sum % i == 0) {
+			int a = i;
+			int b = sum / i;
+			if (a < b) {
+				
+					if ((a - 2) * (b - 2) == red) {
+						answer.push_back(b);
+						answer.push_back(a);
+						break;
+					}
+			}
+			else if (a >= b) {
+				
+					if ((a - 2) * (b - 2) == red) {
+						answer.push_back(a);
+						answer.push_back(b);
+						break;
+					}
+			}
+		}
+	}
+    return answer;
+}
