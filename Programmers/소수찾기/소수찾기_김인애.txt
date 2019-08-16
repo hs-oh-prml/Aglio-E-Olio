@@ -1,0 +1,93 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+int check = 0;
+vector<string> prime;//만들 수 있는 소수 저장
+
+bool isPrime(int number) {
+	if (number == 1)
+		return false;
+	else if (number == 2)
+		return true;
+
+	for (int i = 2; i < number; i++)
+		if (number % i == 0)
+			return false;
+
+	return true;
+}
+
+bool compare(char a, char b) {
+	return a > b;
+}
+
+void make_number(vector<int> select, int length, string numbers) {
+	string n = "";
+
+	for (int i = 0; i < select.size(); i++) {
+		n += numbers.at(select.at(i));
+	}
+	if (isPrime(atoi(n.c_str()))) { // 새로운 소수 발견
+		if (prime.size() == 0) {
+			check++;
+			prime.push_back(n);
+		}
+		else {
+			for (int i = 0; i < prime.size(); i++) {
+				if (prime.at(i) == n)
+					break;
+				else if (i == prime.size() - 1) {
+					check++;
+					prime.push_back(n);
+				}
+			}
+		}
+	}
+	int flag = 0;
+	for (int i = 0; i < length; i++) {
+		for (int j = 0; j < select.size(); j++) {
+			if (select.at(j) == i) {
+				flag = 1;
+				break;
+			}
+		}
+		if (flag == 0) {
+			select.push_back(i);
+			make_number(select, length, numbers);
+			select.pop_back();
+		}
+		flag = 0;
+	}
+}
+/*			if (select.at(j) == i) {
+				continue;
+			}
+			else if (j = select.size() - 1) {
+				select.push_back(i);
+				make_number(select, length, numbers);
+				return;
+			}*/
+
+int solution(string numbers) {
+	int answer = 0;
+
+	sort(numbers.begin(), numbers.end(), compare);
+
+	vector<int> select;//선택된 숫자들 위치
+	//max = atoi(numbers.c_str());//만들 수 있는 최대 숫자
+	int leng = numbers.length();
+
+	for (int i = 0; i < leng; i++) {
+		if (numbers.at(i) == '0')
+			continue;
+		select.push_back(i);
+		make_number(select, leng, numbers);
+		select.clear();
+	}
+	answer = check;
+	return answer;
+}
