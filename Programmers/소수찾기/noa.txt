@@ -1,0 +1,87 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+vector<int> solution(vector<int> answers) {
+    vector<int> answer;
+    
+    int point1 = 0 ;
+    int point2 = 0 ;
+    int point3 = 0 ;
+    
+    for(int i = 0; i < answers.size(); i++){
+        // person 1
+        int check1 = 0 ;
+        int index1 = i%5;
+        switch(index1){
+            case 1 : check1 = 2;break;
+            case 2 : check1 = 3;break;
+            case 3 : check1 = 4;break;
+            case 4 : check1 = 5;break;
+            case 0 : check1 = 1;break;
+        }
+        //채점
+        if(check1 == answers[i]){
+            point1 += 1;
+        }
+        
+        // person 2
+        int check2 = 0;
+        int index2 = 0;
+            //짝수번 문제
+        if(i%2 == 0){
+            check2 = 2;
+        }
+        else{
+            //홀수번 문제
+            index2 = ((i)/2)%4;
+            switch(index2){
+                case 1 : check2 = 3;break;
+                case 2 : check2 = 4;break;
+                case 3 : check2 = 5;break;
+                case 0 : check2 = 1;break;
+            }
+        }
+        //채점
+        if(check2 == answers[i]){
+            point2++;
+        }
+        
+        // person 3
+        int check3 = 0;
+        int index3 = ((i)/2)%5;
+        
+        switch(index3){
+            case 1 : check3 = 1;break;
+            case 2 : check3 = 2;break;
+            case 3 : check3 = 4;break;
+            case 4 : check3 = 5;break;
+            case 0 : check3 = 3;break;
+        }
+        //채점
+        if(check3 == answers[i]){
+            point3++;
+        }
+    }
+    // point 1, 2, 3 에서 max값 찾아서
+    vector<int> temp;
+    temp.push_back(point1);
+    temp.push_back(point2);
+    temp.push_back(point3);
+    
+    int max = 0;
+    for(int i = 0; i < 3; i++){
+        if(max < temp[i]){
+            max = temp[i];
+        }
+    }
+    for(int i = 0; i < temp.size(); i++){
+        if(max == temp[i]){
+            answer.push_back(i+1);
+        }
+    }
+    
+    return answer;
+}

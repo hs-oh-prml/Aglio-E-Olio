@@ -1,0 +1,116 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+int question(int number, int str, int strike, int ball) {
+	int strikeCount = 0;
+	int ballCount = 0;
+	//number를 vector로 쪼개기
+	int hund = number / 100;
+	int ten = (number % 100) / 10;
+	int one = (number % 100) % 10;
+	//str를 vector로 쪼개기
+	int s100 = str / 100;
+	int s10 = (str % 100) / 10;
+	int s1 = (str % 100) % 10;
+
+	//strike check
+	if (s100 == hund) {
+		strikeCount++;
+	}
+	if (s10 == ten) {
+		strikeCount++;
+	}
+	if (s1 == one) {
+		strikeCount++;
+	}
+	//ball check
+	if (s100 == ten || s100 == one) {
+		ballCount++;
+	}
+	if (s10 == hund || s10 == one) {
+		ballCount++;
+	}
+	if (s1 == ten || s1 == hund) {
+		ballCount++;
+	}
+	// strike, ball 값 비교 & return
+	if (ball == ballCount && strike == strikeCount) {
+		int a = s100 * 100;
+		a += s10 * 10;
+		a += s1;
+		return a;
+	}
+	else {
+		return 0;
+	}
+}
+
+int solution(vector<vector<int>> baseball) {
+	int answer = 0;
+	vector<int> allV;
+
+	//모든 3자리 경우를 다 저장
+	vector<int> intV;
+	for (int i = 1; i <= 9; i++) {
+		intV.push_back(i);
+	}
+	sort(intV.begin(), intV.end());
+	//9개 중에서 3개를 pick
+	int k = 3;
+	vector<int> ind;
+
+	for (int i = 0; i < k; i++) {
+		ind.push_back(1);
+	}
+
+	for (int i = 0; i < intV.size() - k; i++) {
+		ind.push_back(0);
+	}
+	
+	sort(ind.begin(), ind.end());
+	do {
+		vector<int> newV;
+		for (int i = 0; i < ind.size(); i++) {
+			if (ind[i] == 1) {
+				newV.push_back(intV[i]);
+			}
+		}
+		do {
+			int num;
+			for (int i = 0; i < newV.size(); i++) {
+				num = newV[0] * 100;
+				num += newV[1] * 10;
+				num += newV[2];
+			}
+			allV.push_back(num);
+		} while (next_permutation(newV.begin(), newV.end()));
+
+	} while (next_permutation(ind.begin(), ind.end()));
+
+	
+	///////////////////////////////////////////////////////
+	//allV라는 벡터에 모든 (9 C 3)이 담겨있다
+	for (int i = 0; i < baseball.size(); i++) {
+		int number = baseball[i][0];
+		int strike = baseball[i][1];
+		int ball = baseball[i][2];
+		//at first
+		vector<int> tempV;
+		for (int j = 0; j < allV.size(); j++) {
+
+			int num = question(number, allV[j], strike, ball);
+			if (num != 0) {
+				tempV.push_back(num);
+			}
+		}
+		allV = tempV;
+	}
+	
+	
+	return allV.size();
+	//return final.size();
+}
