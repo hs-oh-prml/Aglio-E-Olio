@@ -1,0 +1,35 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int check = 0;
+
+void calculate(vector<int> numbers, int target, int index, int value, int plus_minus) {
+
+	if (plus_minus) {// '+' 이면
+		value += numbers.at(index);
+	}
+	else {// '-' 이면
+		value -= numbers.at(index);
+	}
+	if (index == 4) {
+		if (target == value) {
+			check++;
+		}
+		return;
+	}
+	calculate(numbers, target, index + 1, value, 1);
+	calculate(numbers, target, index + 1, value, 0);
+}
+
+int solution(vector<int> numbers, int target) {
+	int answer = 0;
+	int index = 0, value = 0;
+	//calculate라는 재귀함수를 생성해 깊이탐색 시작.
+	calculate(numbers, target, index, value, 1);
+	calculate(numbers, target, index, value, 0);
+	answer = check;
+	return answer;
+}
