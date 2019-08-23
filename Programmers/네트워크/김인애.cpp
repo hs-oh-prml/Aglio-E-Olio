@@ -1,39 +1,33 @@
 #include <string>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
-int solution(vector<int> numbers, int target) {
+vector<bool> visit;
+
+void reculsive(vector<vector<int>> computers, int index) {
+
+	for (int i = 1; i < computers.size(); i++) {
+		if ((computers[index][i] == 1) && !visit[i]) {
+			visit[i] = true;
+			reculsive(computers, i);
+		}
+	}
+}
+
+int solution(int n, vector<vector<int>> computers) {
 	int answer = 0;
-	for (int i = 0; i <= numbers.size(); i++) {
-		vector<int> temp;
-		int index = i;
-		for (int j = 0; j < index; j++) {
-			temp.push_back(1);
+
+	for (int i = 0; i < n; i++) {
+		visit.push_back(false);
+	}
+
+	for (int i = 0; i < n; i++) {
+		if (!visit[i]) {
+			visit[i] = true;
+			reculsive(computers, i);
+			answer++;
 		}
-		for (int j = 0; j < numbers.size() - index; j++) {
-			temp.push_back(0);
-		}
-
-		sort(temp.begin(), temp.end());
-
-		do {
-			int sum = 0;
-			for (int j = 0; j < temp.size(); j++) {
-				if (temp[j] == 1) {
-					sum += numbers[j] * (-1);
-				}
-				else {
-					sum += numbers[j];
-				}
-			}
-
-			if (sum == target) {
-				answer++;
-			}
-
-		} while (next_permutation(temp.begin(), temp.end()));
 	}
 	return answer;
 }
